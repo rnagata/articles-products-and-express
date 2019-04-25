@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Edit</title>
+</head>
+<body>
+  <form action="/products/{{id}}?_method=PUT" method="POST">
+  <input type="hidden" name="_method" value="PUT">
+  <div>
+    <label for="name">Name: </label>
+    <input type="text" id="name" name="name">
+  </div>
+  <div>
+    <label for="price">Price: </label>
+    <input type="text" id="price" name="price">
+  </div>
+  <div>
+    <label for="stock">Inventory: </label>
+    <input type="text" id="inventory" name="inventory">
+  </div>
+  <div class="button">
+    <button type="submit">Submit Changes</button>
+  </div>
+  </form>
+</body>
+</html>
