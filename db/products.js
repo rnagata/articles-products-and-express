@@ -2,7 +2,6 @@
 
 const alphabet = '0123456789';
 const ID_length = 8;
-let ID_used = [];
 let products = [];
 
 // INCOMING: { name: String, price: String, inventory: String }
@@ -16,8 +15,16 @@ function post(propertyParams){
   while (ID_wip.length < ID_length){
     ID_wip += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
 
-    if (ID_wip.length === ID_length && ID_used.includes(ID_wip)){
-      ID_wip = '';
+    if (ID_wip.length === ID_length){
+      let repeat = products.reduce((prev, product) => {
+        if (product.id === ID_wip){
+          return search;
+        }
+      }, undefined);
+
+      if (repeat){
+        ID_wip = '';
+      }
     }
   }
 
@@ -55,41 +62,12 @@ function post(propertyParams){
     }
   }
 
-  // if (search){
-  //   console.log('Product already exists');
-  //   return {"success" : false};
-
-  // } else if (obj.name.length <= 0){
-  //   console.log('Product name is too short');
-  //   return {"success" : false};
-
-  // } else if (obj.price < 1){
-  //   console.log('Product price must be 1 or more');
-  //   return {"success" : false};
-
-  // } else if (obj.inventory < 1){
-  //   console.log('Product inventory must be 1 or more');
-  //   return {"success" : false};
-  // }
-
-// } else {
-//   newProduct.id = ID_wip;
-//   ID_used.push(ID_wip);
-// }
   newProduct.id = parseInt(ID_wip);
   newProduct.name = propertyParams.name;
   newProduct.price = parseFloat(propertyParams.price);
   newProduct.inventory = parseInt(propertyParams.inventory);
 
-  ID_used.push(ID_wip);
   products.push(newProduct);
-  // product = {
-  //   name : obj.name,
-  //   price : parseFloat(obj.price),
-  //   inventory : parseFloat(obj.inventory)
-  // }
-  // product.id = products.length;
-  //products.push(product);
   return {"success" : true};
 }
 
