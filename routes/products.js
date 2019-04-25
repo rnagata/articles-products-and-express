@@ -50,18 +50,8 @@ router.route('/*/edit')
 router.route('/*')
   .put((req, res) => {
     console.log('Putting on product/id');
-    //console.log(req.body);
-    //console.log(req.path);
     req.body.id = req.path.slice(1);
     console.log('Edited: ', req.body);
-    //res.send('Updated a product');
-    // if (productsModule.post(req.body).success){
-    //   htmlContent.products = productsModule.get();
-    //   console.log(productsModule.get());
-    //   res.render('templates/index', htmlContent);
-    // } else {
-    //   res.render('templates/new', error);
-    // }
     let temp = productsModule.put(req.body);
     if (temp.success){
       htmlContent.products = productsModule.get();
@@ -70,19 +60,23 @@ router.route('/*')
     } else {
       res.render('templates/edit');
     }
-    // if put is successful go to products/id
-    // if fail go to products/edit
   })
   .delete((req, res) => {
-    res.send('Removed a product from inventory');
+    console.log('Deleting on product/id');
+    req.body.id = req.path.slice(1);
+    console.log('Edited: ', req.body);
+    let temp = productsModule._delete(req.body);
+    if (temp.success){
+      htmlContent.products = productsModule.get();
+      console.log(productsModule.get());
+      res.render('templates/index', htmlContent);
+    } else {
+      res.render('templates/product', productsModule.get()[temp.id]);
+    }
     productsModule._delete(req.body);
   })
   .get((req, res) => {
-    // console.log(req.path.slice(1));
-    // console.log(productsModule.get()[req.path.slice(1)]);
     res.render('templates/product', productsModule.get()[req.path.slice(1)]);
   });
   
-  
-
 module.exports = router;

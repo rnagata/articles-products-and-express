@@ -65,16 +65,6 @@ function put(obj){
     console.log('Can\'t edit');
     return {"success" : false}
   }
-  
-  // let target;
-  // products.forEach((product) => {
-  //   if (product.id === parseFloat(params.id)){
-  //     target = product;
-  //   }
-  // });
-  // if (target){
-  //   target.price = parseFloat(params.price);
-  // }
 }
 
 function _delete(params){
@@ -89,6 +79,9 @@ function _delete(params){
   });
   if (target){
     products.splice(_index, 1);
+    return {"success" : true};
+  } else {
+    return {"success" : false};
   }
 }
 
