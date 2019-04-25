@@ -1,35 +1,95 @@
 'use strict';
 
+const alphabet = '0123456789';
+const ID_length = 8;
+let ID_used = [];
 let products = [];
 
-function post(obj){
-  console.log('Called dbObject.post');
-  let search = products.reduce((prev, item) => {
-    if (item.name === obj.name){
-      return item;
+// INCOMING: { name: String, price: String, inventory: String }
+// RESULT: { id: Number, name: String, price: Number, inventory: Number }
+
+function post(propertyParams){
+  let newProduct = {};
+  let ID_wip = '';
+  let search;
+
+  while (ID_wip.length < ID_length){
+    ID_wip += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+
+    if (ID_wip.length === ID_length && ID_used.includes(ID_wip)){
+      ID_wip = '';
     }
-  }, undefined);
-  if (search){
-    console.log('Product already exists');
-    return {"success" : false};
-  } else if (obj.name.length <= 0){
-    console.log('Product name is too short');
-    return {"success" : false};
-  } else if (obj.price < 1){
-    console.log('Product price must be 1 or more');
-    return {"success" : false};
-  } else if (obj.inventory < 1){
-    console.log('Product inventory must be 1 or more');
-    return {"success" : false};
   }
 
-  let product = {
-    name : obj.name,
-    price : parseFloat(obj.price),
-    inventory : parseFloat(obj.inventory)
+  search = products.reduce((prev, product) => {
+    if (product.name === propertyParams.name){
+      return product;
+    }
+  }, undefined);
+
+  if (search){
+    return {
+      "success" : false,
+      "message" : "Product already exists.",
+    }
   }
-  product.id = products.length;
-  products.push(product);
+
+  if (propertyParams.name.length <= 0){
+    return { 
+      "success" : false,
+      "message" : "Product name must be one character or more.",
+    }
+  }
+
+  if (propertyParams.price < 1){
+    return {
+      "success" : false,
+      "message" : "Product price must be one or more.",
+    }
+  }
+
+  if (propertyParams.inventory < 1){
+    return {
+      "success" : false,
+      "message" : "Product inventory must be one or more.",
+    }
+  }
+
+  // if (search){
+  //   console.log('Product already exists');
+  //   return {"success" : false};
+
+  // } else if (obj.name.length <= 0){
+  //   console.log('Product name is too short');
+  //   return {"success" : false};
+
+  // } else if (obj.price < 1){
+  //   console.log('Product price must be 1 or more');
+  //   return {"success" : false};
+
+  // } else if (obj.inventory < 1){
+  //   console.log('Product inventory must be 1 or more');
+  //   return {"success" : false};
+  // }
+
+// } else {
+//   newProduct.id = ID_wip;
+//   ID_used.push(ID_wip);
+// }
+  newProduct.id = parseInt(ID_wip);
+  newProduct.name = propertyParams.name;
+  newProduct.price = parseFloat(propertyParams.price);
+  newProduct.inventory = parseInt(propertyParams.inventory);
+
+  ID_used.push(ID_wip);
+  products.push(newProduct);
+  // product = {
+  //   name : obj.name,
+  //   price : parseFloat(obj.price),
+  //   inventory : parseFloat(obj.inventory)
+  // }
+  // product.id = products.length;
+  //products.push(product);
   return {"success" : true};
 }
 

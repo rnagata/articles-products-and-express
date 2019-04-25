@@ -76,6 +76,8 @@ router.route('/*')
     productsModule._delete(req.body);
   })
   .get((req, res) => {
+    console.log('Getting on product/id');
+    console.log(req.path.slice(1));
     res.render('templates/product', productsModule.get()[req.path.slice(1)]);
   });
   
