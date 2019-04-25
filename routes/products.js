@@ -76,9 +76,11 @@ router.route('/*')
     productsModule._delete(req.body);
   })
   .get((req, res) => {
+    let productURI = req.path.slice(1);
     console.log('Getting on product/id');
-    console.log(req.path.slice(1));
-    res.render('templates/product', productsModule.get()[req.path.slice(1)]);
+    console.log(`Getting product ${productURI} from DB`);
+    console.log(`Got ${productsModule.get(productURI)} from DB`);
+    res.render('templates/product', productsModule.get(productURI));
   });
   
 module.exports = router;

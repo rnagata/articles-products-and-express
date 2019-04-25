@@ -7,6 +7,7 @@ let products = [];
 // INCOMING: { name: String, price: String, inventory: String }
 // RESULT: { id: Number, name: String, price: Number, inventory: Number }
 
+
 function post(propertyParams){
   let newProduct = {};
   let ID_wip = '';
@@ -18,7 +19,7 @@ function post(propertyParams){
     if (ID_wip.length === ID_length){
       let repeat = products.reduce((prev, product) => {
         if (product.id === ID_wip){
-          return search;
+          return product;
         }
       }, undefined);
 
@@ -70,6 +71,7 @@ function post(propertyParams){
   products.push(newProduct);
   return {"success" : true};
 }
+
 
 function put(obj){
   console.log('Calling put with ', obj);
@@ -123,8 +125,18 @@ function _delete(params){
   }
 }
 
-function get(){
-  return products;
+function get(target){
+  if (!target){
+    return products;
+  } else {
+    let returnValue = products.reduce((prev, product) => {
+      if (product.id === parseInt(target)){
+        return product;
+      }
+    }, undefined);
+
+    return returnValue;
+  }
 }
 
 module.exports = {
