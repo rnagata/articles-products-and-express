@@ -39,22 +39,17 @@ router.route('/new*')
 
 router.route('/*/edit')
   .get((req, res) => {
-    console.log('Getting on products/*/edit');
-    console.log('Path is', req.path);
-    console.log('Just the number: ', req.path.slice(1, req.path.indexOf('/edit')));//, req.path.indexOf('/')));
-    res.render('templates/edit', { id : req.path.slice(1, req.path.indexOf('/edit'))});
+    let productURI = req.path.slice(1, req.path.indexOf('/edit'));
+    console.log(`Getting on products/${productURI}/edit`);
+    res.render('templates/edit', productsModule.get(productURI));
   })
 
 router.route('/*')
   .put((req, res) => {
-    console.log('Putting on product/id');
-    req.body.id = req.path.slice(1);
-    console.log('Edited: ', req.body);
-    let temp = productsModule.put(req.body);
-    if (temp.success){
-      htmlContent.products = productsModule.get();
-      console.log(productsModule.get());
-      res.render('templates/product', productsModule.get()[temp.id]);
+    let productURI = req.path.slice(1);
+    console.log(`Putting on product/${productURI}`);
+    if (productsModule.put(req.body, productURI).success){
+      res.render('templates/product', productsModule.get(productURI));
     } else {
       res.render('templates/edit');
     }

@@ -10,6 +10,7 @@
     {{#each products}}
     <div class="product-name">
         <h2>{{name}}</h2>
+        <h6>{{id}}</h6>
         <form action="/products/{{id}}" method = "GET">
             <button type="submit">Visit</button>
         </form>

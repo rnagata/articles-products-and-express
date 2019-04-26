@@ -4,10 +4,6 @@ const alphabet = '0123456789';
 const ID_length = 8;
 let products = [];
 
-// INCOMING: { name: String, price: String, inventory: String }
-// RESULT: { id: Number, name: String, price: Number, inventory: Number }
-
-
 function post(propertyParams){
   let newProduct = {};
   let ID_wip = '';
@@ -72,38 +68,35 @@ function post(propertyParams){
   return {"success" : true};
 }
 
-
-function put(obj){
-  console.log('Calling put with ', obj);
-  let search = products.reduce((prev, item) => {
-    console.log('Trying to match ID with ', item.name);
-    if (item.id === parseFloat(obj.id)){
-      console.log('Item.id ', item.id);
-      console.log('Obj.id ', obj.id);
-      return item;
+function put(propertyParams, target){
+  let editedProduct = products.find((product) => {
+    if (product.id === parseInt(target)){
+      return product;
     }
-    return prev;
+  })
+  
+  if (editedProduct){
+    if (propertyParams.name !== ''){
+      editedProduct.name = propertyParams.name;
+    }
     
-  }, undefined);
-  if (search){
-    console.log('Editing: ', search);
-    if (search.name !== obj.name){
-      search.name = obj.name;
+    if (propertyParams.price !== '' && parseFloat(propertyParams.price) > 0){
+      editedProduct.price = parseFloat(propertyParams.price);
     }
-    if (search.price !== obj.price){
-      search.price = parseFloat(obj.price);
+
+    if (propertyParams.inventory !== '' && parseInt(propertyParams.inventory) > 0){
+      editedProduct.inventory = parseInt(propertyParams.inventory); 
     }
-    if (search.inventory !== obj.inventory){
-      search.inventory =parseFloat(obj.inventory);
-    }
-    console.log('Result of put', search);
+  
     return {
       "success" : true,
-      "id" : search.id
+      "message" : `${editedProduct.id} edited.`,
     }
   } else {
-    console.log('Can\'t edit');
-    return {"success" : false}
+    return {
+      "success" : false,
+      "message" : `Failed to find the target object.`,
+    }
   }
 }
 
@@ -145,4 +138,3 @@ module.exports = {
   _delete,
   get,
 }
-
