@@ -17,11 +17,11 @@ function post(propertyParams){
     ID_wip += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
 
     if (ID_wip.length === ID_length){
-      let repeat = products.reduce((prev, product) => {
+      let repeat = products.find((product) => {
         if (product.id === ID_wip){
           return product;
         }
-      }, undefined);
+      });
 
       if (repeat){
         ID_wip = '';
@@ -29,11 +29,11 @@ function post(propertyParams){
     }
   }
 
-  search = products.reduce((prev, product) => {
+  search = products.find((product) => {
     if (product.name === propertyParams.name){
       return product;
     }
-  }, undefined);
+  });
 
   if (search){
     return {
@@ -129,11 +129,11 @@ function get(target){
   if (!target){
     return products;
   } else {
-    let returnValue = products.reduce((prev, product) => {
+    let returnValue = products.find((product) => {
       if (product.id === parseInt(target)){
         return product;
       }
-    }, undefined);
+    });
 
     return returnValue;
   }

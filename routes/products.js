@@ -20,7 +20,6 @@ router.route('/')
     console.log('Posting on products/');
     if (productsModule.post(req.body).success){
       htmlContent.products = productsModule.get();
-      console.log(productsModule.get());
       res.render('templates/index', htmlContent);
     } else {
       res.render('templates/new', error);
@@ -29,7 +28,6 @@ router.route('/')
   .get((req, res) => {
     console.log('Getting on products/');
     htmlContent.products = productsModule.get();
-    console.log(htmlContent.products);
     res.render('templates/index', htmlContent);
   });
 
@@ -79,7 +77,6 @@ router.route('/*')
     let productURI = req.path.slice(1);
     console.log('Getting on product/id');
     console.log(`Getting product ${productURI} from DB`);
-    console.log(`Got ${productsModule.get(productURI)} from DB`);
     res.render('templates/product', productsModule.get(productURI));
   });
   
