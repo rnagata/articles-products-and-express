@@ -8,28 +8,30 @@
 </head>
 <body>
   <div>
-    <h1>Product Creator</h1>
+    <h1>{{_type}} Creator</h1>
   </div>
-  <form action="/products/" method="post">
-  <div>
-    <label for="name">Name: </label>
-    <input type="text" id="name" name="name">
-  </div>
-  <div>
-    <label for="price">Price: </label>
-    <input type="text" id="price" name="price">
-  </div>
-  <div>
-    <label for="inventory">Inventory: </label>
-    <input type="text" id="inventory" name="inventory">
-  </div>
-  <div class="button">
-    <button type="submit">Add Product</button>
-  </div>
-  <div>
-    <a href="/products">Go Back</a>
+  <form action={{formAction}} method="POST">
+    <div>
+      <label for="nameTitle">{{nameTitleLabel}}: </label>
+      <input type="text" id="nameTitle" name="nameTitle">
+    </div>
+    <div>
+      <label for="priceAuthor">{{priceAuthorLabel}}: </label>
+      <input type="text" id="priceAuthor" name="priceAuthor">
+    </div>
+    <div>
+      <label for="inventoryBody">{{inventoryBodyLabel}}: </label>
+      <input type="text" id="inventoryBody" name="inventoryBody">
+    </div>
+    <div class="button">
+      <button type="submit">Add {{submitButtonText}}</button>
+    </div>
+  </form>
+  <form action={{formAction}} method="GET">
+    <div>
+    <button type="submit">Go Back</button>
+    </div>
     <p>{{body}}</p>
-  </div>
   </form>
 </body>
 </html>
