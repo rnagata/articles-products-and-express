@@ -100,21 +100,23 @@ function put(propertyParams, target){
   }
 }
 
-function _delete(params){
-  console.log(params);
-  let target;
-  let _index;
-  products.forEach((product, index) => {
-    if (product.id === parseFloat(params.id)){
-      target = product;
-      _index = index;
+function _delete(target){
+  let search = products.find((product, index) => {
+    if (product.id === parseInt(target)){
+      return product;
     }
   });
-  if (target){
-    products.splice(_index, 1);
-    return {"success" : true};
+  if (search){
+    products.splice(products.indexOf(search), 1);
+    return {
+      "success" : true,
+      "message" : `Successfully deleted ${target}`,
+    }
   } else {
-    return {"success" : false};
+    return {
+      "success" : false,
+      "message" : `Failed to delete ${target}`,
+    }
   }
 }
 

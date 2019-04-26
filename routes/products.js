@@ -37,42 +37,33 @@ router.route('/new*')
     res.render('templates/new');
   })
 
-router.route('/*/edit')
+router.route('/:id/edit')
   .get((req, res) => {
-    let productURI = req.path.slice(1, req.path.indexOf('/edit'));
-    console.log(`Getting on products/${productURI}/edit`);
-    res.render('templates/edit', productsModule.get(productURI));
+    console.log(`Getting on products/${req.params.id}/edit`);
+    res.render('templates/edit', productsModule.get(req.params.id));
   })
 
-router.route('/*')
+router.route('/:id')
   .put((req, res) => {
-    let productURI = req.path.slice(1);
-    console.log(`Putting on product/${productURI}`);
-    if (productsModule.put(req.body, productURI).success){
-      res.render('templates/product', productsModule.get(productURI));
+    console.log(`Putting on product/${req.params.id}`);
+    if (productsModule.put(req.body, req.params.id).success){
+      res.render('templates/product', productsModule.get(req.params.id));
     } else {
       res.render('templates/edit');
     }
   })
   .delete((req, res) => {
-    console.log('Deleting on product/id');
-    req.body.id = req.path.slice(1);
-    console.log('Edited: ', req.body);
-    let temp = productsModule._delete(req.body);
-    if (temp.success){
+    console.log(`Deleting on product/${req.params.id}`);
+    if (productsModule._delete(req.params.id).success){
       htmlContent.products = productsModule.get();
-      console.log(productsModule.get());
       res.render('templates/index', htmlContent);
     } else {
-      res.render('templates/product', productsModule.get()[temp.id]);
+      res.render('templates/product', productsModule.get(req.params.id));
     }
-    productsModule._delete(req.body);
   })
   .get((req, res) => {
-    let productURI = req.path.slice(1);
-    console.log('Getting on product/id');
-    console.log(`Getting product ${productURI} from DB`);
-    res.render('templates/product', productsModule.get(productURI));
+    console.log(`Getting on product/${req.params.id}`);
+    res.render('templates/product', productsModule.get(req.params.id));
   });
   
 module.exports = router;

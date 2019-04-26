@@ -1,5 +1,5 @@
 'use strict';
-
+var path = require('path')
 const express = require('express');
 const exphbs  = require('express-handlebars');
 const methodOverride = require('method-override');
@@ -12,7 +12,7 @@ const htmlContent = {
 
 app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
-
+app.use(express.static(path.join(__dirname, 'public')));
 app.use('/products', products);
 app.get('/', function (req, res) {
     res.render('templates/main', htmlContent);
