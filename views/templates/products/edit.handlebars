@@ -7,22 +7,27 @@
   <title>Edit</title>
 </head>
 <body>
-  <form action="/products/{{id}}?_method=PUT" method="POST">
+  <div>
+    <h1>Product Editor</h1>
+    <h3>{{product.id}}</h3>
+  </div>
+  <form action="/products/{{product.id}}?_method=PUT" method="POST">
   <input type="hidden" name="_method" value="PUT">
   <div>
     <label for="name">Name: </label>
-    <input type="text" id="name" name="name">
+    <input type="text" id="name" name="name" placeholder="{{product.name}}">
   </div>
   <div>
     <label for="price">Price: </label>
-    <input type="text" id="price" name="price">
+    <input type="text" id="price" name="price" placeholder="{{product.price}}">
   </div>
   <div>
-    <label for="stock">Inventory: </label>
-    <input type="text" id="inventory" name="inventory">
+    <label for="inventory">Inventory: </label>
+    <input type="text" id="inventory" name="inventory" placeholder="{{product.inventory}}">
   </div>
   <div class="button">
     <button type="submit">Submit Changes</button>
+    <p>{{message}}</p>
   </div>
   </form>
 </body>

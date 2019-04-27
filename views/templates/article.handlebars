@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>{{title}}</title>
+</head>
+<body>
+  <div>
+    <h1>{{title}}</h1>
+    <h4>By {{author}}</h4>
+    <p>"{{body}}"</p>
+  </div>
+  <div>
+    <form action="/articles/{{title}}/edit" method="GET">
+      <button type="submit">Edit Article</button>
+    </form>
+    <form action="/articles/{{title}}?_method=DELETE" method="POST">
+      <input type="hidden" name="_method" value="DELETE">
+        <button type="submit">Delete Article</button>
+    </form>
+    <form action="/articles/" method="GET">
+      <button type="submit">Go Back</button>
+    </form>
+  </div>
+</body>
+</html>

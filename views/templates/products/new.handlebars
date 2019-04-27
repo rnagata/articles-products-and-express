@@ -7,6 +7,9 @@
   <title>New</title>
 </head>
 <body>
+  <div>
+    <h1>Product Creator</h1>
+  </div>
   <form action="/products/" method="post">
   <div>
     <label for="name">Name: </label>
@@ -17,7 +20,7 @@
     <input type="text" id="price" name="price">
   </div>
   <div>
-    <label for="stock">Inventory: </label>
+    <label for="inventory">Inventory: </label>
     <input type="text" id="inventory" name="inventory">
   </div>
   <div class="button">
@@ -25,7 +28,7 @@
   </div>
   <div>
     <a href="/products">Go Back</a>
-    <p>{{body}}</p>
+    <p>{{message}}</p>
   </div>
   </form>
 </body>

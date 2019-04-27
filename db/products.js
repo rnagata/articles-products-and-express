@@ -1,91 +1,139 @@
 'use strict';
 
 let products = [];
+let counter = 0;
 
-function post(obj){
-  console.log('Called dbObject.post');
-  let search = products.reduce((prev, item) => {
-    if (item.name === obj.name){
-      return item;
-    }
-  }, undefined);
-  if (search){
-    console.log('Product already exists');
-    return {"success" : false};
-  } else if (obj.name.length <= 0){
-    console.log('Product name is too short');
-    return {"success" : false};
-  } else if (obj.price < 1){
-    console.log('Product price must be 1 or more');
-    return {"success" : false};
-  } else if (obj.inventory < 1){
-    console.log('Product inventory must be 1 or more');
-    return {"success" : false};
-  }
+function post(propertyParams){
+  let newProduct = {};
+  let search;
 
-  let product = {
-    name : obj.name,
-    price : parseFloat(obj.price),
-    inventory : parseFloat(obj.inventory)
-  }
-  product.id = products.length;
-  products.push(product);
-  return {"success" : true};
-}
-
-function put(obj){
-  console.log('Calling put with ', obj);
-  let search = products.reduce((prev, item) => {
-    console.log('Trying to match ID with ', item.name);
-    if (item.id === parseFloat(obj.id)){
-      console.log('Item.id ', item.id);
-      console.log('Obj.id ', obj.id);
-      return item;
-    }
-    return prev;
-    
-  }, undefined);
-  if (search){
-    console.log('Editing: ', search);
-    if (search.name !== obj.name){
-      search.name = obj.name;
-    }
-    if (search.price !== obj.price){
-      search.price = parseFloat(obj.price);
-    }
-    if (search.inventory !== obj.inventory){
-      search.inventory =parseFloat(obj.inventory);
-    }
-    console.log('Result of put', search);
-    return {
-      "success" : true,
-      "id" : search.id
-    }
-  } else {
-    console.log('Can\'t edit');
-    return {"success" : false}
-  }
-}
-
-function _delete(params){
-  console.log(params);
-  let target;
-  let _index;
-  products.forEach((product, index) => {
-    if (product.id === parseFloat(params.id)){
-      target = product;
-      _index = index;
+  search = products.find((product) => {
+    if (product.name === propertyParams.name){
+      return product;
     }
   });
-  if (target){
-    products.splice(_index, 1);
-    return {"success" : true};
-  } else {
-    return {"success" : false};
+
+  if (search){
+    return {
+      success : false,
+      message : "Product already exists.",
+    }
+  }
+
+  if (propertyParams.name.length <= 0){
+    return { 
+      success : false,
+      message : "Product name must be one or more characters in length.",
+    }
+  }
+
+  if (propertyParams.price < 1){
+    return {
+      success : false,
+      message : "Product price must be one or greater.",
+    }
+  }
+
+  if (propertyParams.inventory < 1){
+    return {
+      success : false,
+      message : "Product inventory must be one or greater.",
+    }
+  }
+
+  newProduct.id = counter;
+  newProduct.name = propertyParams.name;
+  newProduct.price = parseFloat(propertyParams.price);
+  newProduct.inventory = parseInt(propertyParams.inventory);
+  products.push(newProduct);
+  counter++;
+
+  return {
+    success : true,
+    message : "Product added."
+  };
+}
+
+function put(propertyParams, target){
+  if (parseFloat(propertyParams.price) < 0){
+    return {
+      success : false,
+      message : "Price must be greater than zero.",
+    }
+  }
+  if (parseInt(propertyParams.inventory) < 0){
+    return {
+      success: false,
+      message: "Inventory must be greater than zero.",
+    }
+  }
+
+  let editedProduct = products.find((product) => {
+    if (product.id === parseInt(target)){
+      return product;
+    }
+  });
+  if (!editedProduct){
+    return {
+      success : false,
+      message : "Product not found."
+    }
+  } 
+
+  if (propertyParams.name !== ''){
+    editedProduct.name = propertyParams.name;
+  }
+  if (propertyParams.price !== ''){
+    editedProduct.price = parseFloat(propertyParams.price);
+  }
+  if (propertyParams.inventory !== ''){
+    editedProduct.inventory = parseInt(propertyParams.inventory);
+  }
+  
+  return {
+    success : true,
+    message : 'Product successfully edited.',
   }
 }
 
-function get(){
+function _delete(target){
+  let search = products.find((product) => {
+    if (product.id === parseInt(target)){
+      return product;
+    }
+  });
+  if (search){
+    products.splice(products.indexOf(search), 1);
+    return {
+      success : true,
+      message : `Successfully deleted ${target}`,
+    }
+  } else {
+    return {
+      success : false,
+      message : `Failed to delete ${target}`,
+    }
+  }
+}
+
+function getProduct(target){
+  if (!target){
+    return {
+      success : false,
+      message : "No product given.",
+    };
+  } else {
+    let returnValue = products.find((product) => {
+      if (product.id === parseInt(target)){
+        return product;
+      }
+    });
+
+    return returnValue;
+  }
+}
+
+function getProducts(){
   return products;
 }
 
@@ -93,6 +141,6 @@ module.exports = {
   post,
   put,
   _delete,
-  get,
+  getProduct,
+  getProducts,
 }
-
