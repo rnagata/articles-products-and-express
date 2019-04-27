@@ -3,67 +3,71 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
-const router = express.Router();
 const productsModule = require('../db/products.js');
-let htmlContent = { 
-  body: 'You addressed the products',
-};
-let error = {
-  body: 'Item already exists. Try Again'
-}
+
+const router = express.Router();
+let htmlContent = {};
+let error = { message: undefined };
 
 router.use(bodyParser.urlencoded({extended: true}));
 router.use(methodOverride('_method'));
 
 router.route('/')
   .post((req, res) => {
-    console.log('Posting on products/');
-    if (productsModule.post(req.body).success){
-      htmlContent.products = productsModule.get();
-      res.render('templates/index', htmlContent);
+    let result = productsModule.post(req.body);
+    if (result.success){
+      res.redirect('/products/');
     } else {
-      res.render('templates/new', error);
+      error.message = result.message;
+      res.redirect('/products/new');
     }
   })
   .get((req, res) => {
-    console.log('Getting on products/');
-    htmlContent.products = productsModule.get();
-    res.render('templates/index', htmlContent);
+    htmlContent.products = productsModule.getProducts();
+    res.render('templates/products/index', htmlContent);
   });
 
 router.route('/new*')
   .get((req, res) => {
-    console.log('Getting on products/new');
-    res.render('templates/new');
-  })
+    // rename 'tempError' when understanding improves.
+    let tempError = { message : error.message };
+    error.message = undefined;
+    res.render('templates/products/new', tempError);
+  });
 
 router.route('/:id/edit')
   .get((req, res) => {
-    console.log(`Getting on products/${req.params.id}/edit`);
-    res.render('templates/edit', productsModule.get(req.params.id));
-  })
+    // rename new obj when understanding improves.
+    let info = { 
+      message : error.message, 
+      product : productsModule.getProduct(req.params.id),
+    };
+    error.message = undefined;
+    res.render('templates/products/edit', info);
+  });
 
 router.route('/:id')
   .put((req, res) => {
-    console.log(`Putting on product/${req.params.id}`);
-    if (productsModule.put(req.body, req.params.id).success){
-      res.render('templates/product', productsModule.get(req.params.id));
+    let result = productsModule.put(req.body, req.params.id);
+    if (result.success){
+      res.redirect(`/products/${req.params.id}`);
     } else {
-      res.render('templates/edit');
+      error.message = result.message;
+      res.redirect(`/products/${req.params.id}/edit`);
     }
   })
   .delete((req, res) => {
-    console.log(`Deleting on product/${req.params.id}`);
-    if (productsModule._delete(req.params.id).success){
-      htmlContent.products = productsModule.get();
-      res.render('templates/index', htmlContent);
+    let result = productsModule._delete(req.params.id);
+    if (result.success){
+      res.redirect('/products/');
     } else {
-      res.render('templates/product', productsModule.get(req.params.id));
+      error.message = result.message;
+      res.redirect(`/products/${req.params.id}`);
     }
   })
   .get((req, res) => {
-    console.log(`Getting on product/${req.params.id}`);
-    res.render('templates/product', productsModule.get(req.params.id));
+    error.message = undefined;
+    res.render('templates/product', productsModule.getProduct(req.params.id));
   });
   
 module.exports = router;
