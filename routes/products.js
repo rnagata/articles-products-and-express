@@ -1,20 +1,15 @@
 'use strict';
 
 const express = require('express');
-const bodyParser = require('body-parser');
-const methodOverride = require('method-override');
 const productsModule = require('../db/products.js');
-
 const router = express.Router();
-let htmlContent = {};
-let error = { message: undefined };
 
-router.use(bodyParser.urlencoded({extended: true}));
-router.use(methodOverride('_method'));
+let htmlContent = {};
+let error = { message : undefined };
 
 router.route('/')
   .post((req, res) => {
-    let result = productsModule.post(req.body);
+    let result = productsModule.createProduct(req.body);
     if (result.success){
       res.redirect('/products/');
     } else {
@@ -27,7 +22,7 @@ router.route('/')
     res.render('templates/products/index', htmlContent);
   });
 
-router.route('/new*')
+router.route('/new')
   .get((req, res) => {
     // rename 'tempError' when understanding improves.
     let tempError = { message : error.message };
@@ -48,7 +43,7 @@ router.route('/:id/edit')
 
 router.route('/:id')
   .put((req, res) => {
-    let result = productsModule.put(req.body, req.params.id);
+    let result = productsModule.editProduct(req.body, req.params.id);
     if (result.success){
       res.redirect(`/products/${req.params.id}`);
     } else {
@@ -57,7 +52,7 @@ router.route('/:id')
     }
   })
   .delete((req, res) => {
-    let result = productsModule._delete(req.params.id);
+    let result = productsModule.deleteProduct(req.params.id);
     if (result.success){
       res.redirect('/products/');
     } else {

@@ -2,7 +2,7 @@
 
 let articles = [];
 
-function post(propertyParams){
+function createArticle(propertyParams){
   let newArticle = {}; 
   let search;
 
@@ -31,7 +31,7 @@ function post(propertyParams){
   };
 }
 
-function put(propertyParams, target){
+function editArticle(propertyParams, target){
   let editedArticle = articles.find((article) => {
     if (article.title === target){
       return article;
@@ -61,7 +61,7 @@ function put(propertyParams, target){
   }
 }
 
-function _delete(target){
+function deleteArticle(target){
   let search = articles.find((article) => {
     if (article.title === target){
       return article;
@@ -103,9 +103,9 @@ function getArticles(){
 }
 
 module.exports = {
-  post,
-  put,
-  _delete,
+  createArticle,
+  editArticle,
+  deleteArticle,
   getArticle,
   getArticles,
 }

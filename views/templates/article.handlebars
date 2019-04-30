@@ -13,16 +13,12 @@
     <p>"{{body}}"</p>
   </div>
   <div>
-    <form action="/articles/{{title}}/edit" method="GET">
-      <button type="submit">Edit Article</button>
-    </form>
+    <a href="/articles/{{title}}/edit">Edit Article</a>
     <form action="/articles/{{title}}?_method=DELETE" method="POST">
       <input type="hidden" name="_method" value="DELETE">
-        <button type="submit">Delete Article</button>
+      <button type="submit">Delete Article</button>
     </form>
-    <form action="/articles/" method="GET">
-      <button type="submit">Go Back</button>
-    </form>
+    <a href="/articles">Go Back</a>
   </div>
 </body>
 </html>

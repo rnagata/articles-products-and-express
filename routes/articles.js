@@ -1,20 +1,15 @@
 'use strict';
 
 const express = require('express');
-const bodyParser = require('body-parser');
-const methodOverride = require('method-override');
 const articlesModule = require('../db/articles.js');
+const router = express.Router();
 
 let htmlContent = {};
 let error = { message : undefined };
-const router = express.Router();
-
-router.use(bodyParser.urlencoded({extended: true}));
-router.use(methodOverride('_method'));
 
 router.route('/')
   .post((req, res) => {
-    let result = articlesModule.post(req.body);
+    let result = articlesModule.createArticle(req.body);
     if (result.success){
       res.redirect('/articles/');
     } else {
@@ -26,7 +21,7 @@ router.route('/')
     res.render('templates/articles/index', htmlContent);
   });
 
-router.route('/new*')
+router.route('/new')
   .get((req, res) => {
     res.render('templates/articles/new');
   })
@@ -38,7 +33,7 @@ router.route('/:title/edit')
 
 router.route('/:title')
   .put((req, res) => {
-    let result = articlesModule.put(req.body, req.params.title);
+    let result = articlesModule.editArticle(req.body, req.params.title);
     if (result.success){
       res.redirect(`/articles/${req.params.title}`);
     } else {
@@ -46,7 +41,7 @@ router.route('/:title')
     }
   })
   .delete((req, res) => {
-    let result = articlesModule._delete(req.params.title);
+    let result = articlesModule.deleteArticle(req.params.title);
     if (result.success){
       res.redirect('/articles/');
     } else {

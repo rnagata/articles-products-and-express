@@ -3,7 +3,7 @@
 let products = [];
 let counter = 0;
 
-function post(propertyParams){
+function createProduct(propertyParams){
   let newProduct = {};
   let search;
 
@@ -54,7 +54,7 @@ function post(propertyParams){
   };
 }
 
-function put(propertyParams, target){
+function editProduct(propertyParams, target){
   if (parseFloat(propertyParams.price) < 0){
     return {
       success : false,
@@ -96,7 +96,7 @@ function put(propertyParams, target){
   }
 }
 
-function _delete(target){
+function deleteProduct(target){
   let search = products.find((product) => {
     if (product.id === parseInt(target)){
       return product;
@@ -138,9 +138,9 @@ function getProducts(){
 }
 
 module.exports = {
-  post,
-  put,
-  _delete,
+  createProduct,
+  editProduct,
+  deleteProduct,
   getProduct,
   getProducts,
 }
