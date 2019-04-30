@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>New</title>
+</head>
+<body>
+  <div>
+    <h1>Product Creator</h1>
+  </div>
+  <form action="/products/" method="post">
+    <div>
+      <label for="name">Name: </label>
+      <input type="text" id="name" name="name">
+    </div>
+    <div>
+      <label for="price">Price: </label>
+      <input type="text" id="price" name="price">
+    </div>
+    <div>
+      <label for="inventory">Inventory: </label>
+      <input type="text" id="inventory" name="inventory">
+    </div>
+    <div class="button">
+      <button type="submit">Add Product</button>
+    </div>
+    <div>
+      <a href="/products">Go Back</a>
+      <p>{{message}}</p>
+    </div>
+  </form>
+</body>
+</html>
