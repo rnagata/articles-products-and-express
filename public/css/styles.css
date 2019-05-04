@@ -9,26 +9,23 @@
 .button-panel {
   display: flex;
   flex-wrap: wrap;
-  align-content: center; 
-  justify-content: center;
-  padding-left: 10px;
-}
+  align-content: center; }
 
 .button {
-  background: transparent;
-  color: #B3E5FC;
-  border: 2px solid #B3E5FC;
+  background: #EAECEE;
+  border: none;
   font-size: 20px;
-}
+  height: 75%; }
 
 h1 {
   margin: 0px; }
 
 body {
   background: #34495E;
-  color: white; }
+  color: white;
+  margin: 0px; }
 
-#product-name {
+#content {
   text-align: center;
   padding-left: 5%;
   padding-top: 10px; }

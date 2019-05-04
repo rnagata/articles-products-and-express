@@ -16,8 +16,13 @@ const htmlContent = {
 
 app.use(methodOverride('_method'));
 app.use(bodyParser.urlencoded({extended: true}));
-app.engine('handlebars', exphbs());
-app.set('view engine', 'handlebars');
+app.set('view engine', 'hbs');
+app.engine('hbs', exphbs({ 
+  extname: 'hbs',
+  defaultLayout: 'main',
+  layoutsDir: __dirname + '/views/layouts/',
+  partialsDir: __dirname + '/views/partials/'
+}));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/products', products);
 app.use('/articles', articles);
