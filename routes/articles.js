@@ -18,7 +18,13 @@ router.route('/')
   //   }
   // })
   .get((req, res) => {
-    res.send('OK');
+    knex.select().table('articles')
+    .then((result) => {
+      console.log('article select result', result);
+      res.render('templates/articles/index', { articles: result });
+    })
+    // res.send('OK');
+
     // htmlContent.articles = articlesModule.getArticles();
     // res.render('templates/articles/index', htmlContent);
   });

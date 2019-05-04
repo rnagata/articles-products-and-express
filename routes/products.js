@@ -2,58 +2,70 @@
 
 const express = require('express');
 const knex = require('../database');
-//const productsModule = require('../db/products.js');
 const router = express.Router();
 
-let htmlContent = {};
-//let error = { message : undefined };
+let errorHolder;
 
 router.route('/')
   .post((req, res) => {
-    knex.insert([
-      {name : req.body.name}, 
-      {price : parseInt(req.body.price)}, 
-      {inventory: parseInt(req.body.inventory)}
-    ]).into('products');
+    for (let prop in req.body){
+      if (req.body[prop] === ''){
+        errorHolder = "Missing field";
+        return res.redirect('/products/new');
+      }
+    }
     
-    // .then((result) => {
-    //   res.redirect('/products');
-    // })
-    // .catch((err) => {
-    //   res.redirect('/products/new');
-    // })
-    // let result = productsModule.createProduct(req.body);
-    // if (result.success){
-    //   res.redirect('/products/');
-    // } else {
-    //   error.message = result.message;
-    //   res.redirect('/products/new');
-    // }
+    if (isNaN(parseFloat(req.body.price)) || parseFloat(req.body.price) <= 0){
+      errorHolder = "Product price must be greater than zero.";
+      return res.redirect('/products/new');
+    }
+
+    if (isNaN(parseInt(req.body.inventory)) || parseFloat(req.body.inventory) <= 0){
+      errorHolder = "Product inventory must be greater than zero.";
+      return res.redirect('/products/new');
+    }
+
+    knex.select('name').table('products').where({name: req.body.name})
+    .then((result) => {
+      if (result.length > 0){
+        errorHolder = "Product already exists";
+        return res.redirect('/products/new');
+      }
+
+      return knex.insert({
+        name : req.body.name, 
+        price : parseInt(req.body.price), 
+        inventory: parseInt(req.body.inventory)
+      })
+      .into('products')
+      .then((result) => {
+        return res.redirect('/products');
+      })
+      .catch((err) => {
+        return res.status(500).json(err);
+      });
+    });
   })
+    
   .get((req, res) => {
     knex.select().table('products')
     .then((result) => {
-      console.log('table select result', result);
-      res.render('templates/products/index', { products: result });
+      let context = {
+        products: result,
+      };
+      res.render('templates/products/index', context);
     })
   });
 
 router.route('/new')
   .get((req, res) => {
-    // rename 'tempError' when understanding improves.
-    //let tempError = { message : error.message };
-    res.render('templates/products/new'); //{});
+    let context = { error : errorHolder };
+    errorHolder = undefined;
+    res.render('templates/products/new', context);
   });
 
 router.route('/:id/edit')
   .get((req, res) => {
-    // rename new obj when understanding improves.
-    // let info = { 
-    //   message : error.message, 
-    //   product : productsModule.getProduct(req.params.id),
-    // };
-    // error.message = undefined;
-    // res.render('templates/products/edit', info);
     knex.select().table('products').where({id: req.params.id})
     .then((result) => {
       res.render('templates/products/edit', { product: result[0] });
@@ -61,31 +73,48 @@ router.route('/:id/edit')
   });
 
 router.route('/:id')
-//   .put((req, res) => {
-//     let result = productsModule.editProduct(req.body, req.params.id);
-//     if (result.success){
-//       res.redirect(`/products/${req.params.id}`);
-//     } else {
-//       error.message = result.message;
-//       res.redirect(`/products/${req.params.id}/edit`);
-//     }
-//   })
-//   .delete((req, res) => {
-//     let result = productsModule.deleteProduct(req.params.id);
-//     if (result.success){
-//       res.redirect('/products/');
-//     } else {
-//       error.message = result.message;
-//       res.redirect(`/products/${req.params.id}`);
-//     }
-//   })
+  .put((req, res) => {
+    let changes = {};
+
+    if (req.body.name.length >= 1){
+      changes.name = req.body.name;
+    }
+    if (!isNaN(parseFloat(req.body.price)) && parseFloat(req.body.price) > 0){
+      changes.price = parseInt(req.body.price);
+    }
+    if (!isNaN(parseInt(req.body.inventory)) && parseInt(req.body.inventory) > 0){
+      changes.inventory = parseInt(req.body.inventory);
+    }
+
+    if (Object.keys(changes).length > 0){
+      knex('products').where('id', '=', req.params.id).update(changes)
+      .then((result) => {
+        return res.redirect(`/products/${req.params.id}`);
+      })
+      .catch((err) => {
+        return res.status(500).json(err);
+      });
+    } else {
+      res.redirect(`/products/${req.params.id}/edit`);
+    }
+  })
+
+  .delete((req, res) => {
+    knex('products').where('id', '=', req.params.id).del()
+    .then((result) => {
+      if (result >= 1){
+        return res.redirect('/products');
+      } else {
+        return res.redirect(`/products/${req.params.id}`);
+      }
+    });
+  })
+  
   .get((req, res) => {
     knex.select().table('products').where({id: req.params.id})
     .then((result) => {
       res.render('templates/products/product', { product: result[0] });
     });
-    //error.message = undefined;
-    //productsModule.getProduct(req.params.id));
   });
   
 module.exports = router;
