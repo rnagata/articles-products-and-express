@@ -1,0 +1,16 @@
+<div id="banner">
+  <h1>Products</h1>
+  <a href="/products/new">Add New Product</a>
+</div>
+{{#each products}}
+<div class="product-name">
+  <h2>{{name}}</h2>
+  <h6>{{id}}</h6>
+  <a href="/products/{{id}}">Visit</a>
+</div>
+{{/each}}
+{{#unless products}}
+<div class="product-name">
+  <p>No products available</p>
+</div>
+{{/unless}}

@@ -1,0 +1,31 @@
+@import url("https://fonts.googleapis.com/css?family=Alegreya+SC:700");
+#banner {
+  display: flex;
+  justify-content: space-evenly;
+  font-family: 'Alegreya SC', serif;
+  font-size: 30px;
+  border-bottom: 2px solid white; }
+
+.button-panel {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center; }
+
+.button {
+  background: #EAECEE;
+  border: none;
+  font-size: 20px;
+  height: 75%; }
+
+h1 {
+  margin: 0px; }
+
+body {
+  background: #34495E;
+  color: white;
+  margin: 0px; }
+
+#content {
+  text-align: center;
+  padding-left: 5%;
+  padding-top: 10px; }

@@ -1,0 +1,24 @@
+<div>
+  <h1>Product Creator</h1>
+</div>
+<form action="/products/" method="post">
+  <div>
+    <label for="name">Name: </label>
+    <input type="text" id="name" name="name">
+  </div>
+  <div>
+    <label for="price">price: </label>
+    <input type="text" id="price" name="price">
+  </div>
+  <div>
+    <label for="inventory">inventory: </label>
+    <input type="text" id="inventory" name="inventory">
+  </div>
+  <div class="button">
+    <button type="submit">Add Product</button>
+  </div>
+  <div>
+    <a href="/products">Go Back</a>
+    <p>{{error}}</p>
+  </div>
+</form>
